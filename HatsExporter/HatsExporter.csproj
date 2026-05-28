@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>hat-exporter</AssemblyName>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Description>Exports Among Us hat sprites to the BetterCrewLink-Hats format.</Description>
     <Authors>OhMyGuus</Authors>
     <ImplicitUsings>enable</ImplicitUsings>

@@ -32,6 +32,7 @@ jobs:
             --runtime ${{ matrix.rid }} \
             --self-contained \
             -p:PublishSingleFile=true \
+            -p:IncludeNativeLibrariesForSelfExtract=true \
             -p:DebugType=none \
             --output publish/${{ matrix.rid }}
 
