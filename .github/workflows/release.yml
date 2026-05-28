@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - rid: linux-x64
+            asset: hat-exporter-linux-x64
+            ext: ''
+          - rid: win-x64
+            asset: hat-exporter-win-x64.exe
+            ext: .exe
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+
+      - name: Publish ${{ matrix.rid }}
+        run: |
+          dotnet publish HatsExporter/HatsExporter.csproj \
+            --configuration Release \
+            --runtime ${{ matrix.rid }} \
+            --self-contained \
+            -p:PublishSingleFile=true \
+            -p:DebugType=none \
+            --output publish/${{ matrix.rid }}
+
+      - name: Stage artifact
+        run: cp publish/${{ matrix.rid }}/hat-exporter${{ matrix.ext }} ${{ matrix.asset }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.asset }}
+          path: ${{ matrix.asset }}
+
+  create-release:
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            hat-exporter-linux-x64
+            hat-exporter-win-x64.exe
