@@ -104,14 +104,12 @@ static class Exporter
     static JsonObject BuildJsonEntry(CosmeticEntry entry, AssetTypeValueField hvdField,
                                      string? imagePng, string? backImagePng)
     {
-        var obj = new JsonObject
-        {
-            ["hat_type"]   = entry.HatType,
-            ["asset_name"] = entry.AssetName
-        };
+        var obj = new JsonObject();
         if (imagePng     != null) obj["image"]      = imagePng;
         if (backImagePng != null) obj["back_image"] = backImagePng;
         if (hvdField["MatchPlayerColor"].AsBool) obj["multi_color"] = true;
+        obj["hat_type"]   = entry.HatType;
+        obj["asset_name"] = entry.AssetName;
         return obj;
     }
 
